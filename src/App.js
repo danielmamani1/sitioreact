@@ -1,4 +1,4 @@
-import App.js from './componentes/App.js';
+import App from './componentes/App.js';
 import './App.css';
 
 function App() {
