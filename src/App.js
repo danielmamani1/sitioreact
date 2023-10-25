@@ -2,6 +2,7 @@ import AppForm from './componentes/AppForm';
 import logo from './logo.svg';
 //import './App.css';
 import C01componente from './pagina/C01componente';
+import {db} from './componentes/firebase';
 
 function App() {
   return (
