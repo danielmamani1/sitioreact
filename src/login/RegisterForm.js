@@ -8,19 +8,28 @@ import { auth, db } from '../conexion/firebase';
 
 function RegisterForm() {
 
-  const { register } = useAuth();             // Registra usuario
-  
-  const [email, setEmail] = useState('');       // Variables para correo
-  const [password, setPassword] = useState(''); // Variable para password
-  
-  const navigate = useNavigate();               // Navegación
+  const { register } = useAuth();         // Registra usuario
+  //const { registerUser } = useAuth();   // Registra previa verificación 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleRegister = (e) => { 
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      await register(email, password);
+      //await registerUser(email, password);    // Verifica correo ya registrado
+      navigate('/iniciarsesion'); // Redirigir a ruta /iniciarsesion
+      console.log("Se registro usuario...xxx");
+    } catch (error) {
+      console.error('Error al registrar usuario:', error.message);
+    }
   }
 
   return (
     <div  id='public'>
-      <h2>Registro de Nuevo Usuario</h2>
+      <h2>Registro de Nuevo Usuarios</h2>
       <form onSubmit={handleRegister}>
         <div>
           <label>Email:</label>
@@ -37,18 +46,3 @@ function RegisterForm() {
 }
 
 export default RegisterForm;
-
-/*
-const handleRegister = async (e) => {
-    e.preventDefault();
-
-    try {
-      await register(email, password);
-      //await registerUser(email, password);    // Verifica correo ya registrado
-      navigate('/iniciarsesion'); // Redirigir a ruta /iniciarsesion
-      console.log("Se registro usuario...xxx");
-    } catch (error) {
-      console.error('Error al registrar usuario:', error.message);
-    }
-  }
-*/

@@ -1,10 +1,10 @@
 import logo from './logo.svg';
-import './App.css';
-import C01componente from './pagina/C01componente';
-import AppForm from './pagina/AppForm';
+//import './App.css';
+import { C01componente } from './component/C01componente';
 import { useState } from 'react';
-import { collection, doc, onSnapshot, query } from 'firebase/firestore';
-import { db } from './pagina/firebase';
+import AppForm from './component/Appform';
+import { collection, deleteDoc, doc, onSnapshot, query } from 'firebase/firestore';
+import { db } from './firebase/firebase';
 
 function App() {
 
@@ -27,29 +27,33 @@ function App() {
   }
 
   fnRead(); 
+    console.log(docBD)
+    /////////// DELETE -Eliminar-fnDelete/////
+    const [idActual, setIdActual]= useState("");
 
-  /////////// DELETE -Eliminar-fnDelete/////
-  const [idActual, setIdActual]= useState("");
-  const fnDelete = (xId) => {}
-    
-  
- 
-  return (
-    <div style={{width:"350px",background:"greenyellow", padding:"10px"}}>
-    <AppForm {...{idActual, setIdActual, fnRead}} />
-    {docBD.map((p) => 
-       <p key={p.id}>
-       Nº. 1 {p.nombre}...
-      <span onClick={() => fnDelete(p.id)}>x</span>
-      ...
-      <span onClick={() => setIdActual(p.id)}>A</span>
-      </p>
-      )
+    const fnDelete = async (xId) => {
+      if(window.confirm("Confirme para eliminar")){
+        await deleteDoc(doc(db, "persona", xId));
+        alert("Se elimino con exito ....");
+      }
     }
-    
-    </div>
-  );
-}
-
-
-export default App;
+    return (
+      <div style={{width:"350px",background:"#84b6f4", padding:"10px"}}>
+      <AppForm {...{idActual, setIdActual, fnRead}} />
+      {docBD.map((r, index) => 
+         <p key={r.id}>
+          Nº. {index+1}. {r.nombre}
+          -------
+          <span onClick={() =>fnDelete(r.id)}>x</span>
+          -------
+          <span onClick={() =>setIdActual(r.id)}>A</span>
+        </p>
+        )
+      }
+      
+      </div>
+    );
+  }
+  
+  
+  export default App;

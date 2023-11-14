@@ -7,6 +7,12 @@ import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
 import Home from '../public/Home';
+import Dashboard from '../public/Dashboard';
+import Contacto from '../public/Contacto';
+import AcercaDe from '../public/AcercaDe';
+import LoginForm from '../login/LoginForm';
+
+import RegisterForm from '../login/RegisterForm';
 
 const BarraRutasPublic = () => {
     const { user } = useAuth();
@@ -14,6 +20,16 @@ const BarraRutasPublic = () => {
     const navigate = useNavigate();
   
     const handleSignOut = () => {
+      if (user) {
+        signOut(auth)
+          .then(() => {
+            // Cierre de sesión exitoso
+            navigate('/home'); // Redirigir a ruta /home
+          })
+          .catch((error) => {
+            console.error('Error al cerrar sesión:', error);
+          });
+      }
     }
   
     return (
@@ -31,13 +47,23 @@ const BarraRutasPublic = () => {
           
           <div id="menu">
             <ul>
-              <li><Link to="/home">Home</Link> </li>
+              <li><Link to="/home">Inicio(Home)</Link> </li>
+              <li><Link to="/contacto">Informacion</Link> </li>
+              <li><Link to="/acercade">Noticias</Link> </li>
+              <li><Link to="/contacto">Contacto</Link> </li>
             </ul>
           </div>
         </nav>
   
         <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/iniciarsesion" element={<LoginForm />} />
+          <Route path="/nuevoregistro" element={<RegisterForm />} />
+        
+          <Route path="/" element={<Dashboard />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/contacto" element={<Contacto />} />
+          <Route path="/acercade" element={<AcercaDe />} />
         </Routes> 
       </div>
     )
